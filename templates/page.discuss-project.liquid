@@ -1,0 +1,109 @@
+<style>
+        .contact-grid a.grids-item { width: 31%; display: inline-block; border: 1px solid #000; padding: 25px; height: 280px;
+          margin-right: 20px; }
+        .item-label h4.label-name { margin-top: 6px; }
+        .item-label { margin-bottom: 10px; transform: translate3d(0px, 170%, 0); transition: 0.5s all ease; }
+        p.item-description { transform: translate3d(0, 150%, 0); opacity: 0; transition: 0.6s all ease; }
+        .contact-grid a.grids-item:hover .item-label { transform: translate3d(0, 20%, 0); }
+        .contact-grid a.grids-item:hover .item-description { opacity: 1; transform: translate3d(0, 20%, 0); }
+        .label-icon img { margin: 0px; }
+        .contact-grid { width: 100%; float: left; margin-bottom: 80px; }
+        .sub-heading{ text-align: center; }
+        .PageHeader { margin: 50px 0 20px 0; }
+        .PageContent.PageContent--narrow.Rte { margin-top: 50px; }
+         h3.inspired.cntr { font-size: 32px; text-align: center; font-weight: 700; margin: 50px 0px 0px 0px; }
+         .cntr { text-align: center; }
+  
+           @media (max-width:768px) {
+           .contact-grid a.grids-item { width: 100%; margin-bottom: 20px; }
+            }  
+        
+    </style>
+
+<div class="Container">
+  <header class="PageHeader">
+    <div class="SectionHeader SectionHeader--center">
+      <h1 class="SectionHeader__Heading Heading u-h1"><span>Get help with your design today</span></h1>
+    </div>
+  </header>
+   <p class="sub-heading">Contact us today to help lead you through your selection process.</p>
+  
+  <div class="PageContent PageContent--narrow Rte">
+     
+     <div class="contact-grid">
+            <a class="grids-item" href="#">
+              <div class="item-contents">
+                <div class="item-label">
+                  <div class="label-icon">
+                    <img width="50px" src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/msg.png">
+                  </div>
+                  <h4 class="label-name">
+                    Chat With Us
+                  </h4>
+                </div>
+                <p class="item-description">
+                  LIVE chat with a technical specialists online from any device. 
+                </p>
+              </div>
+            </a>
+            
+            
+            <a class="grids-item" href="mailto:info@artos.us.com">
+              <div class="item-contents">
+                <div class="item-label">
+                  <div class="label-icon">
+                    <img width="50px" src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/text-box.png">
+                  </div>
+                  <h4 class="label-name">
+                    Email Us
+                  </h4>
+                </div>
+                <p class="item-description">
+                  Get help from our award-winning customer care team. 
+                </p>
+              </div>
+            </a>
+            
+            <a class="grids-item" href="tel:402.397.3344">
+              <div class="item-contents">
+                <div class="item-label">
+                  <div class="label-icon">
+                    <img width="50px" src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/imgpsh_fullsize_anim.png">
+                  </div>
+                  <h4 class="label-name">
+                    Call Us 402.397.3344
+                  </h4>
+                </div>
+                <p class="item-description">
+                  Chat on the phone today with our customer care team. 
+                </p>
+              </div>
+            </a>
+
+
+          </div>
+
+      
+  
+       <h2 class="">Let's discuss your project </h2>
+    <p>Are you ready to start or finally finish your project? Like you, we understand completing a project can seem daunting
+      and even frustrating. We care more about creating an easy experience everyone deserves. <a href="mailto:info@artos.us.com">Contact us today.</a></p>
+<!--[if lte IE 8]>
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2-legacy.js"></script>
+<![endif]-->
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2.js"></script>
+<script>
+  hbspt.forms.create({
+	portalId: "8238842",
+	formId: "324acb6e-9e81-40d0-8091-d373efa39984"
+});
+</script>
+        
+    
+    <h3 class="inspired cntr">Get Inspired,</h3>
+    <p class="cntr">Browse through design gallery</p>
+    {% include 'gallery-design' %}
+    
+    
+  </div>
+</div>

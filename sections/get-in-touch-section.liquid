@@ -1,0 +1,79 @@
+<div class="get-in-touch-section" style="background-color: {{ section.settings.bgcolor }}">
+  <div class="container">
+    <div class="center">
+      {% if section.settings.title != blank %}
+        <h2 class="h2-main-title">{{ section.settings.title }}</h2>
+      {% endif %}
+    </div>
+    <div class="get-in-touch-blocks">
+      {% for block in section.blocks %}
+        <a class="get-in-touch-block" href="{% if block.settings.url != blank %}{{ block.settings.url }}{% else %}javascript:;{% endif %}">
+          <div class="without-hover-block">
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}">
+            {% endif %}
+            {% if block.settings.title != blank %}
+              <h5>{{ block.settings.title }}</h5>
+            {% endif %}
+          </div>
+          <div class="with-hover-block">
+            {% if block.settings.subheading != blank %}
+              <p>{{ block.settings.subheading }}</p>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Get in touch",
+    "settings": [
+      {
+        "type": "color",
+        "id": "bgcolor",
+        "label": "Background Color"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "text",
+        "settings": [
+            {
+              "type": "image_picker",
+              "id": "image",
+              "label": "Icon Code"
+            },
+            {
+              "type": "text",
+              "id": "title",
+              "label": "Title"
+            },
+            {
+               "type": "url",
+               "id": "url",
+              "label": "Url"
+            },
+            {
+              "type": "textarea",
+              "id": "subheading",
+              "label": "subheading"
+            }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

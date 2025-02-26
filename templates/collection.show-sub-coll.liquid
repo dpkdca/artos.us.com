@@ -1,0 +1,54 @@
+<style>
+  .CollectionToolbar {
+    display: none;
+}
+</style>
+{% if collection.handle == "select-by-project-type" %}
+  <style>
+   header.PageHeader.PageHeader--withBackground { display: none; }
+    .collection-desc { text-align: center; margin: 120px 0px 60px 0px; }
+    .collection-desc h2 { font-size: 28px; text-transform: capitalize; }
+    .supports-sticky .Search[aria-hidden="true"]+.Header--transparent { background: #59058d; }
+    
+       @media (max-width:768px) {
+           .contact-grid a.grids-item { width: 100%; margin-bottom: 20px; }
+        } 
+ </style>
+<div class="Container">
+<!--   <header class="PageHeader">
+    <div class="SectionHeader SectionHeader--center">
+      <h1 class="SectionHeader__Heading Heading u-h1"><span>{{ collection.title }}</span></h1>
+    </div>
+  </header>
+ -->
+  <div class="PageContent PageContent--narrow Rte">
+
+<!-- <div class="ArticleListWrapper prod-sec">
+<div class="ArticleList Grid Grid--center">
+<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up"><span class="cust-img"><img src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/prod-img1.png"> <a href="/collections/cadiz" class="category-button">Cadiz</a> </span></div>
+<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up"><span class="cust-img"><img src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/img002.png"> <a href="/collections/denby-tub" class="category-button">Denby/tub</a> </span></div>
+<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up"><span class="cust-img"><img src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/img003.png"> <a href="/collections/lioni" class="category-button">Lioni</a> </span></div>
+</div>
+<div class="ArticleList Grid Grid--center">
+<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up"><span class="cust-img"><img src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/img004.png"> <a href="/collections/ryton" class="category-button">Ryton</a> </span></div>
+<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up"><span class="cust-img"><img src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/img005.png"> <a href="/collections/solent" class="category-button">Solent</a> </span></div>
+<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up"><span class="cust-img"><img src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/imgg006.png"> <a href="/collections/stour" class="category-button">Stour</a> </span></div>
+</div>
+<div class="ArticleList Grid Grid--center">
+<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up"><span class="cust-img"><img src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/imgg007.png"> <a href="/collections/versatile" class="category-button">Versatile</a> </span></div>
+<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up"><span class="cust-img"><img src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/imgg008.png"> <a href="/collections/extras" class="category-button">Extras</a> </span></div>
+</div>
+</div> -->
+   
+   
+  </div>
+  
+  
+  
+</div>
+    <div class="collection-desc">{{ collection.description }}</div>
+    {% include 'project-col' %}
+ {% endif %}
+{% section 'collection-template-ssc' %}
+{% section 'recently-viewed-products' %}
+{% section 'collection-footer' %}

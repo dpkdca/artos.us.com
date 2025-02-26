@@ -1,0 +1,311 @@
+<div class="Container">
+  <header class="PageHeader">
+    <div class="SectionHeader SectionHeader--center">
+      <h1 class="SectionHeader__Heading Heading u-h1">{{ page.title }}</h1>
+    </div>
+  </header>
+
+  <div class="PageContent PageContent--narrow">
+    <div class="Rte">
+      
+      <style>
+        .cont-sec{ width:100%; float:left; }
+        .half_sec { width: 65%; float: left; padding: 0px 45px 0px 0px; }
+        .sec-half { width: 35%; float: left; }
+        .half_sec h2 { margin: 0px 0px 20px 0px; }
+        .half_sec p { padding: 0px 60px 0px 0px; } 
+        .faq { width: 100%; float: left; }
+        .faq h2 { margin: 0px 0px 30px 0px; }
+        .faq-inn { width: 33%; float: left; margin: 0px 0px 25px 0px; }
+        .faq-inn p { margin-bottom: 0px !important; }
+        .faq-inn p a { font-style: italic; }
+        .video_sec .media_hlf { width: 50%; float: left; padding-right: 20px; }
+        .media_hlf p { padding: 15px 0px 35px 0px; }
+        .media_hlf p { padding: 15px 0px 35px 0px; }
+        .video_sec { width: 100%; float: left; }
+        .video_sec h2 { text-align: center; font-size: 32px; }
+        
+        
+        .contact-grid a.grids-item {
+          width: 31%;
+          display: inline-block;
+          border: 1px solid #000;
+          padding: 25px;
+          height: 280px;
+          margin-right: 20px;
+        }
+        .item-label h4.label-name {
+          margin-top: 6px;
+        }
+        .item-label {
+          margin-bottom: 10px;
+          transform: translate3d(0px, 170%, 0);
+          transition: 0.5s all ease;
+        }
+
+        p.item-description {
+          transform: translate3d(0, 150%, 0);
+          opacity: 0;
+          transition: 0.6s all ease;
+        }
+
+
+        .contact-grid a.grids-item:hover .item-label {
+          transform: translate3d(0, 20%, 0);
+        }
+
+
+        .contact-grid a.grids-item:hover .item-description {
+          opacity: 1;
+          transform: translate3d(0, 20%, 0);
+        }
+        .label-icon img {
+          margin: 0px;
+        }
+        .contact-grid {
+          width: 100%;
+          float: left;
+          margin-bottom: 80px;
+        }
+
+
+        @media (max-width:768px) {
+           .contact-grid a.grids-item { width: 100%; margin-bottom: 20px; }
+           .half_sec p { padding: 0px; }
+           .half_sec { width: 100%; padding: 0; }
+          .sec-half { width: 100%; }
+          .faq-inn { width: 100%; margin: 0px 0px 15px 0px; }
+          .video_sec .media_hlf { width: 100%; padding-right: 0; }
+        }
+        
+        
+      </style>
+      
+    <!--  {{- page.content -}}  -->
+      
+      
+      
+
+          <div class="contact-grid">
+            <a class="grids-item" href="#">
+              <div class="item-contents">
+                <div class="item-label">
+                  <div class="label-icon">
+                    <img width="50px" src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/msg.png">
+                  </div>
+                  <h4 class="label-name">
+                    Chat With Us
+                  </h4>
+                </div>
+                <p class="item-description">
+                  LIVE Chat with us and find a dealer in your area today. 
+                </p>
+              </div>
+            </a>
+            
+            
+            <a class="grids-item" href="mailto:info@artos.us.com">
+              <div class="item-contents">
+                <div class="item-label">
+                  <div class="label-icon">
+                    <img width="50px" src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/text-box.png">
+                  </div>
+                  <h4 class="label-name">
+                    Email Us
+                  </h4>
+                </div>
+                <p class="item-description">
+                  Get help from our award-winning customer care team. 
+                </p>
+              </div>
+            </a>
+            
+            <a class="grids-item" href="tel:402.397.3344">
+              <div class="item-contents">
+                <div class="item-label">
+                  <div class="label-icon">
+                    <img width="50px" src="https://cdn.shopify.com/s/files/1/0328/1525/1592/files/imgpsh_fullsize_anim.png">
+                  </div>
+                  <h4 class="label-name">
+                    Call Us
+                  </h4>
+                </div>
+                <p class="item-description">
+                  Call our customer care team and find a dealer in your area today. 
+                </p>
+              </div>
+            </a>
+
+
+          </div>
+
+      
+      
+      
+      
+      <div class="cont-sec">
+        <div class="half_sec">
+            <h2>Find a Dealer</h2>
+            <p>Get in touch with one of our certified dealers in your area. Please fill out our contact form below, or select from a contact option above and we will put you in touch with a dealer in your area. Our team will be back to you within 24 hours.</p>
+        
+          
+          {%- form 'contact', class: 'Form Form--spacingTight' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="Alert Alert--success">{{ 'contact.form.successfully_sent' | t }}</p>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <div class="Form__Alert Alert Alert--error">
+            <ul class="Alert__ErrorList">
+              {%- for field in form.errors -%}
+                {%- if field == 'form' -%}
+                  <li class="Alert__ErrorItem">{{ form.errors.messages[field] }}</li>
+                {%- else -%}
+                  <li class="Alert__ErrorItem"><strong>{{ form.errors.translated_fields[field] }}</strong> {{ form.errors.messages[field] }}</li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="Form__Group">
+          <div class="Form__Item">
+            <input type="text" class="Form__Input" name="contact[name]" aria-label="{{ 'contact.form.name' | t }}" placeholder="{{ 'contact.form.name' | t }}" required {% if customer %}value="{{ customer.name }}"{% endif %}>
+            <label class="Form__FloatingLabel">{{ 'contact.form.name' | t }}</label>
+          </div>
+
+          <div class="Form__Item">
+            <input type="email" class="Form__Input" name="contact[email]" aria-label="{{ 'contact.form.email' | t }}" placeholder="{{ 'contact.form.email' | t }}" required {% if customer %}value="{{ customer.email }}"{% endif %}>
+            <label class="Form__FloatingLabel">{{ 'contact.form.email' | t }}</label>
+          </div>
+        </div>
+
+        {%- for block in section.blocks -%}
+          {%- assign field_title = block.settings.title -%}
+
+          {%- if field_title == blank -%}
+            {%- capture field_title -%}Custom field {% increment custom_field %}{%- endcapture -%}
+          {%- endif -%}
+
+          {%- if block.type == 'text' -%}
+            <div class="Form__Item">
+              {%- if block.settings.use_long_text -%}
+                <textarea name="contact[{{ field_title | escape }}]" cols="30" rows="4" class="Form__Textarea" aria-label="{{ block.settings.title | escape }}" placeholder="{{ block.settings.title | escape }}" {% if block.settings.is_required %}required{% endif %}></textarea>
+                <label class="Form__FloatingLabel">{{ block.settings.title | escape }}</label>
+              {%- else -%}
+                <input type="text" class="Form__Input" name="contact[{{ field_title | escape }}]" aria-label="{{ block.settings.title | escape }}" placeholder="{{ block.settings.title | escape }}" {% if block.settings.is_required %}required{% endif %}>
+                <label class="Form__FloatingLabel">{{ block.settings.title | escape }}</label>
+              {%- endif -%}
+            </div>
+          {%- elsif block.type == 'dropdown' -%}
+            {%- assign values = block.settings.values | split: ',' -%}
+
+            {%- if values == empty -%}
+              {%- continue -%}
+            {%- endif -%}
+
+            <div class="Form__Item">
+              <div class="Form__Select Select Select--primary">
+                {%- include 'icon' with 'select-arrow' -%}
+
+                <select name="contact[{{ field_title | escape }}]" title="{{ block.settings.title | escape }}" required>
+                  <option value="" disabled selected>{{ block.settings.title | escape }}</option>
+
+                  {%- for value in values -%}
+                    {%- assign trim_value = value | strip -%}
+
+                    <option value="{{ trim_value | escape }}">{{ trim_value | escape }}</option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+        <div class="Form__Item">
+          <textarea name="contact[body]" cols="30" rows="4" class="Form__Textarea" aria-label="{{ 'contact.form.message' | t }}" placeholder="{{ 'contact.form.message' | t }}" required></textarea>
+          <label class="Form__FloatingLabel">{{ 'contact.form.message' | t }}</label>
+        </div>
+
+        <button type="submit" class="Form__Submit Button Button--primary Button--full">{{ 'contact.form.submit' | t }}</button>
+      {%- endform -%}
+          
+          
+        </div>
+        <div class="sec-half">
+          <p><strong>(402) 397.3344</strong><br><br><strong>Hours:</strong> Monday - Friday<br> 8:00AM - 4:30PM<br><br><b>Warehouse:&nbsp;</b>13305 B Street<br> Omaha Nebraska, 68144<br><br><b>Email&nbsp;</b><a href="mailto:info@artos.us.com">info@artos.us.com</a><br>&nbsp;</p>
+        
+        </div>
+      
+      </div>
+      
+
+      
+      
+      
+      
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact page",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text field",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name",
+          "default": "Custom field"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_long_text",
+          "label": "Use long text",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "is_required",
+          "label": "Field is required",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "name": "Dropdown",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name",
+          "default": "Custom field"
+        },
+        {
+          "type": "text",
+          "id": "values",
+          "label": "Values",
+          "info": "Separate each value by a comma.",
+          "default": "value 1, value 2, value 3"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "text",
+        "settings": {
+          "title": "Your phone (optional)"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

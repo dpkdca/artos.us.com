@@ -1,0 +1,160 @@
+<style>
+  .view-all-products-btn {
+    text-align: center;
+    margin-top: 2rem;
+}
+  .view-all-products-btn a.btn.primary-btn {
+    background-color: #000000;
+    padding: 10px !important;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+.view-all-products-btn a.btn.primary-btn:hover {
+    background-color: var(--gold) !important;
+    color: var(--black) !important;
+}
+  .Sub-collection-grid .FlexboxIeFix {
+    margin-bottom: 2rem;
+}
+  .custom-bannner img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    object-position: center;
+}
+  .custom-bannner header.PageHeader {
+    position: absolute;
+    top: 10%;
+    width: 100%;
+}
+.custom-bannner header.PageHeader .SectionHeader__Description.Rte p {
+    font-weight: 600;
+}
+  .Sub-collection-grid .ProductItem__Wrapper a.ProductItem__ImageWrapper, .Sub-collection-grid .view-all-products-btn a.btn.primary-btn {
+    border-radius: 5px;
+}
+  .ProductList.ProductList--grid.Grid {
+    text-align: center;
+}
+</style>
+
+<div class="Sub-collection-grid" style="padding-bottom: 4rem;margin-top: -3.1rem;">
+<div class="custom-bannner">
+  {% if collection.metafields.custom.custom_banner %}
+    <img src="{{ collection.metafields.custom.custom_banner | img_url: 'master' }}" alt="Collection Banner">
+  {% endif %}
+  
+   <header class="PageHeader">
+          <div class="Container">
+            <div class="SectionHeader SectionHeader--center">
+              <h1 class="SectionHeader__Heading Heading u-h1">{{ collection.title }}</h1>
+
+              {%- if collection.description != blank -%}
+                <div class="SectionHeader__Description Rte">
+                  {{- collection.description -}}
+                </div>
+              {%- endif -%}
+              <!-- <a style="margin-top: 2rem;border: 1px solid;padding: 3px;" href="{{ collection.url }}" class="btn primary-btn">See All</a> -->
+            </div>
+          </div>
+        </header>
+  
+</div>
+  
+  {% for collection in collection.metafields.custom.sub_collections.value %}
+     {%- comment -%}
+    --------------------------------------------------------------------------------------------------------------------
+    COLLECTION INFO
+    --------------------------------------------------------------------------------------------------------------------
+    {%- endcomment -%}
+{% comment %}
+{% if forloop.index == 1 %}
+<div class="FlexboxIeFix">
+          <header class="PageHeader PageHeader--withBackground {% if section.settings.collection_image_size != 'normal' %}PageHeader--{{ section.settings.collection_image_size }}{% endif %}" style="background: url({{ collection.image | img_url: '1x1', format: 'jpg' }})">
+          <div class="PageHeader__ImageWrapper Image--lazyLoad Image--fadeIn {% if section.settings.apply_overlay %}Image--contrast{% endif %}"
+               data-optimumx="1.2"
+               data-bgset="{{ collection.image | img_url: 'x600' }} 600w, {{ collection.image | img_url: '800x' }} 800w, {{ collection.image | img_url: '1200x' }} 1200w, {{ collection.image | img_url: '1400x' }} 1400w, {{ collection.image | img_url: '1600x' }} 1600w">
+          </div>
+
+          <noscript>
+            <div class="PageHeader__ImageWrapper {% if section.settings.apply_overlay %}Image--contrast{% endif %}" style="background-image: url({{ collection.image | img_url: '800x' }})"></div>
+          </noscript>
+
+          <div class="Container">
+            <div class="SectionHeader SectionHeader--center">
+              <h1 class="SectionHeader__Heading Heading u-h1">{{ collection.title }}</h1>
+
+              {%- if collection.description != blank -%}
+                <div class="SectionHeader__Description Rte">
+                  {{- collection.description -}}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </header>
+        </div>
+     
+       {% else %}
+        <header class="PageHeader">
+          <div class="Container">
+            <div class="SectionHeader SectionHeader--center">
+              <h1 class="SectionHeader__Heading Heading u-h1">{{ collection.title }}</h1>
+
+              {%- if collection.description != blank -%}
+                <div class="SectionHeader__Description Rte">
+                  {{- collection.description -}}
+                </div>
+              {%- endif -%}
+              
+            </div>
+          </div>
+        </header>
+      {% endif %}
+   {% endcomment %}
+
+
+    
+    <header class="PageHeader">
+          <div class="Container">
+            <div class="SectionHeader SectionHeader--center">
+              <h1 class="SectionHeader__Heading Heading u-h1">{{ collection.title }}</h1>
+
+              {%- if collection.description != blank -%}
+                <div class="SectionHeader__Description Rte">
+                  {{- collection.description -}}
+                </div>
+              {%- endif -%}
+              <!-- <a style="margin-top: 2rem;border: 1px solid;padding: 3px;" href="{{ collection.url }}" class="btn primary-btn">See All</a> -->
+            </div>
+          </div>
+        </header>
+    
+   
+  {%- if collection.products_count > 0 -%}
+    {%- paginate collection.products by section.settings.grid_items_per_page -%}
+      <div class="ProductListWrapper">
+        <div class="ProductList ProductList--grid {% if paginate.pages > 1 %}ProductList--removeMargin{% endif %} Grid" data-mobile-count="{{ mobile_items_per_row }}" data-desktop-count="{{ desktop_items_per_row }}">
+          {%- for product in collection.products -%}
+{%- include 'bold-product' with product, hide_action: 'skip' -%}
+            <div class="Grid__Cell 1/{{ mobile_items_per_row }}--phone 1/{{ tablet_items_per_row }}--tablet-and-up 1/{{ desktop_items_per_row }}--{% if section.settings.filter_position == 'drawer' %}lap-and-up{% else %}desk{% endif %}">
+              {%- include 'product-item', show_product_info: true, show_vendor: section.settings.show_vendor, show_color_swatch: section.settings.show_color_swatch, show_labels: true -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+    {% comment %}  {%- include 'pagination' -%} {% endcomment %}
+    {%- endpaginate -%}
+  {%- else -%}
+    <div class="EmptyState">
+      <div class="Container">
+        <h1 class="EmptyState__Title Heading u-h5">{{ 'collection.general.no_products' | t }}</h1>
+        <button class="EmptyState__Action Button Button--primary" data-action="reset-tags">{{ 'collection.general.reset' | t }}</button>
+      </div>
+    </div>
+  {%- endif -%}
+   <div class="view-all-products-btn"> <a style="margin-top: 2rem;border: 1px solid;padding: 3px;" href="{{ collection.url }}" class="btn primary-btn">View All Products</a></div>
+  {% endfor %}
+  
+</div>

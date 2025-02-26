@@ -1,0 +1,49 @@
+{% if section.settings.show_product_imagewithtext %}
+<div class="product-section-bgimagewithtest-section" style="background-image: url({{ section.settings.bg_image | img_url: 'master' }})">
+  <div class="Container">
+    <div class="text-block">
+      {% if section.settings.content_title != blank %}<h3 class="title-section">{{ section.settings.content_title }}</h3>{% endif %}
+      {% if section.settings.buttontext %}<a href="{{ section.settings.button_link }}">{{ section.settings.buttontext }}</a>{% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% schema %}
+  {
+    "name": "Section name",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_product_imagewithtext",
+        "label": "Show Image with Text block",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_image",
+        "label": "Background image"
+      },
+      {
+        "type": "text",
+        "id": "content_title",
+        "label": "Heading"
+      },
+      {
+        "type": "text",
+        "id": "buttontext",
+        "label": "Button Title"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

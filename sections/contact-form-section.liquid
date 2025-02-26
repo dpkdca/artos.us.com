@@ -1,0 +1,89 @@
+<div class="contact-form-section" style="background-color: {{ section.settings.bgcolor }}">
+  <div class="container">
+    <div class="center">
+      {% if section.settings.title != blank %}
+        <h2 class="h2-main-title">{{ section.settings.title }}</h2>
+      {% endif %}
+      {% if section.settings.content != blank %}
+        <p class="w-50">{{ section.settings.content }}</p>
+      {% endif %}
+    </div>
+    <div class="contact-form-block">
+      {% form 'contact' , id: 'ContactForm' %}
+        {%- if form.posted_successfully? -%}
+          <h2 class="form-status form-status-list form__message" tabindex="-1" autofocus>Thank you for getting in touch! </h2>
+        {%- elsif form.errors -%}
+          {{ form.errors | default_errors }}
+        {%- endif -%}
+        <div class="form-group">
+          <label for="first-name">Name*</label>
+          <input type="text" name="contact[first_name]" id="first-name" placeholder="Your name" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="information_id">I am interested in</label>
+          <input type="text" name="contact[information_id]" id="information_id" placeholder="Interior Design" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="tel" name="contact[phone]" id="phone" placeholder="Your phone number" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="location_id">Location*</label>
+          <input type="text" name="contact[location_id]" id="location_id" placeholder="Location" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" name="contact[email]" id="email" placeholder="Your working email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="contact-method">Preferred contact method</label>
+            <div class="form-control-radio">
+              <input type="radio" name="contact[contact_method]" value="Phone" id="Phone"><label for="Phone">Phone</label>
+              <input type="radio" name="contact[contact_method]" value="Email" id="Email"><label for="Email">Email</label>
+              <input type="radio" name="contact[contact_method]" value="Viber" id="Viber"><label for="Viber">Viber</label>
+            </div>
+        </div>
+        <div class="form-group form-group-row">
+          <label for="message">Message</label>
+          <textarea name="contact[body]" id="message" placeholder="Your message" class="form-control"></textarea>
+        </div>
+        <div class="form-group form-group-checkbox">
+          <input type="checkbox" name="contact[agree]" id="agree" value="true">
+          <label for="agree">I agree to receive communications from Artos</label>
+        </div>
+        <div class="form-group form-group-button">
+          <input type="submit" value="submit" class="btn gold-primary-button" />
+        </div>
+    {% endform %}
+
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Contact form",
+    "settings": [
+      {
+        "type": "color",
+        "id": "bgcolor",
+        "label": "Background Color"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      },
+      {
+        "type": "textarea",
+        "id": "content",
+        "label": "Sub heading"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

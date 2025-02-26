@@ -1,0 +1,35 @@
+<style>
+  .cust-img a.category-button { font-size: 28px; }
+  .Grid--center { text-align: left; }
+  .ArticleListWrapper.prod-sec { margin-top: 50px; }
+  ul.by-cln { margin: 0px; list-style: none; }
+  ul.by-cln li { display: inline-block; vertical-align: middle; width: 32%; margin: 0px 0px 0px 13px; }
+  ul.by-cln li a { background: #ededed; display: block; text-align: center; padding: 50px 10px; }
+  .cust-img a.category-button { text-align: center; }
+</style>
+<div class="Container">
+  <header class="PageHeader">
+    <div class="SectionHeader SectionHeader--center">
+      <h1 class="SectionHeader__Heading Heading u-h1"><span>{{ page.title }}</span></h1>
+    </div>
+  </header>
+
+  <div class="PageContent PageContent--narrow Rte">
+    {{ page.content }}  
+    
+    <ul style="margin-top:50px" class="by-cln">
+      {%- for link in linklists.by-collection.links -%}
+      <li>
+        <a href="{{ link.url }}" {% if link.active %}aria-current="page"{% endif %}>
+          {{ link.title }}
+        </a>
+      </li> 
+      {%- endfor -%}
+    </ul>
+    
+    
+    {% section 'acc-slideshow' %}
+    
+    
+  </div>
+</div>

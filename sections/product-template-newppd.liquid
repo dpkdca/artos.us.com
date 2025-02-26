@@ -1,0 +1,1072 @@
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css"/>
+{%- capture section_settings -%}
+{
+  "enableHistoryState": true,
+  "templateSuffix": {{ product.template_suffix | json }},
+  "showInventoryQuantity": {{ section.settings.show_inventory_quantity | json }},
+  "showSku": {{ section.settings.show_sku | json }},
+  "stackProductImages": {{ section.settings.stack_images | json }},
+  "showThumbnails": {{ section.settings.show_thumbnails | json }},
+  "inventoryQuantityThreshold": {{ section.settings.inventory_quantity_threshold }},
+  "showPriceInButton": {{ section.settings.show_price_in_button | json }},
+  "enableImageZoom": {{ section.settings.enable_image_zoom | json }},
+  "showPaymentButton": {{ section.settings.show_payment_button | json }},
+  "useAjaxCart": {% if settings.cart_type == 'drawer' %}true{% else %}false{% endif %}
+}
+{%- endcapture -%}
+<div class="breadcrumbs-section">
+  <div class="Container">
+    {% include 'breadcrumbs' %}
+  </div>
+</div>
+<section class="dpk Product Product--{{ section.settings.image_size }}" data-section-id="{{ section.id }}" data-section-type="product" data-section-settings='{{ section_settings }}'>
+  <div class="Product__Wrapper">
+    {%- capture action_list_items -%}
+      {%- if section.settings.enable_image_zoom -%}
+        <div class="Product__ActionItem hidden-lap-and-up">
+          <button class="RoundButton RoundButton--small RoundButton--flat" data-action="open-product-zoom">{% include 'icon' with 'plus' %}</button>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_share_buttons -%}
+        <div class="Product__ActionItem hidden-lap-and-up">
+          <button class="RoundButton RoundButton--small RoundButton--flat" data-action="toggle-social-share" data-animate-bottom aria-expanded="false">
+            <span class="RoundButton__PrimaryState">{% include 'icon' with 'share' %}</span>
+            <span class="RoundButton__SecondaryState">{% include 'icon' with 'close' %}</span>
+          </button>
+
+          {%- assign share_url = shop.url | append: product.url -%}
+          {%- assign twitter_text = product.title -%}
+          {%- assign pinterest_description = product.description | strip_html | truncatewords: 15 | url_param_escape -%}
+          {%- assign pinterest_image = product.featured_image | img_url: 'large' | prepend: 'https:' -%}
+
+          <div class="Product__ShareList" aria-hidden="true">
+            <a class="Product__ShareItem" href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener">{%- include 'icon' with 'facebook' -%} Facebook</a>
+            <a class="Product__ShareItem" href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}" target="_blank" rel="noopener">{%- include 'icon' with 'pinterest' -%} Pinterest</a>
+            <a class="Product__ShareItem" href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener">{%- include 'icon' with 'twitter' -%} Twitter</a>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endcapture -%}
+
+    {%- comment -%}
+    --------------------------------------------------------------------------------------------------------------------
+    PRODUCT GALLERY
+    --------------------------------------------------------------------------------------------------------------------
+    {%- endcomment -%}
+    {%- assign initial_image_id = product.featured_image.id -%}
+    {%- assign initial_image_index = 0 -%}
+    {%- assign image_count = 0 -%}
+    <div class="product-slider">
+
+<style>
+  .variant-images-gallery img {
+  max-width: 100%;
+  margin: 5px 0;
+}
+
+.variant-images-gallery {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+</style>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <style>
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .swiper {
+      width: 100%;
+      height: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .swiper-slide {
+      background-size: cover;
+      background-position: center;
+    }
+
+    .mySwiper2, .mySwiperall {
+      height: 80%;
+      width: 100%;
+    }
+
+    .mySwiper, .mySwiperallt {
+      height: 20%;
+      box-sizing: border-box;
+      padding: 10px 0;
+    }
+
+    .mySwiper .swiper-slide, .mySwiperallt .swiper-slide {
+      width: 25%;
+      height: 100%;
+      /* opacity: 0.4; */
+    }
+
+    .mySwiper .swiper-slide-thumb-active, .mySwiperallt .swiper-slide-thumb-active {
+      opacity: 1;
+    }
+
+    .swiper-slide img {
+      display: block;
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+    }
+    /* .swiper {background-color: #efefef} */
+    
+.swiper-button-prev:after, .swiper-button-next:after {
+    content: none !important;
+}
+.mySwiper2 .swiper-slide img, .mySwiperall .swiper-slide img {
+    height: 500px;
+    width: 500px;
+}
+.mySwiper .swiper-slide img, .mySwiperallt .swiper-slide img {
+    height: auto;
+    object-fit: cover;
+}
+    .swiper-free-mode>.swiper-wrapper {
+    justify-content: center;
+}
+    .swiper-slide.swiper-slide-visible img {
+    box-shadow: 0 0 8px #a5a3a3e3;
+}
+    .mySwiper2 .swiper-button-next, .mySwiper2 .swiper-button-prev, .mySwiperall .swiper-button-next, .mySwiperall .swiper-button-prev {
+    background-color: #d9d9d980;
+    padding: 3px;
+}
+    .mySwiper .swiper-slide, .mySwiperallt .swiper-slide, .swiper-slide.swiper-slide-visible img {
+      border-radius: 20px;
+      margin: 3px !important;
+    width: 95%;
+    }
+@media screen and (max-width: 480px) {
+  .mySwiper .swiper-slide, .mySwiperallt .swiper-slide {
+    margin: 5px !important;
+}
+  .mySwiper2 .swiper-slide img, .mySwiperall .swiper-slide img {
+    height: 400px;
+    width: 400px;
+}
+}
+ .variant-slider-wrapper .swiper-slide-thumb-active {
+    border: 2px solid #000;
+}   
+  </style>
+
+{% for variant in product.variants %}
+  {% assign variant_gallery = variant.metafields.custom.variant_images_gallery.value %}
+
+  <!-- Add "active" class only to the first variant to show it by default -->
+  <div class="variant-slider-wrapper" data-variant="{{ variant.id }}">
+    <h3>{{ variant.title }}</h3>
+
+    <!-- Main Swiper for Large Images -->
+    <div class="swiper mySwiperall mySwiper2-{{ variant.id }}" style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff">
+      <div class="swiper-wrapper">
+        {% for image in variant_gallery %}
+          <div class="swiper-slide" data-varint-name="{{ variant.title }}">
+            <img src="https://artos.us.com/cdn/shop/{{ image }}" alt="Variant Image {{ forloop.index }}">
+          </div>
+        {% endfor %}
+      </div>
+      <div class="swiper-button-next"><svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.1714 0.802079C11.5191 0.411026 12.0829 0.411026 12.4307 0.802079L16.4375 5.30817C16.7852 5.69922 16.7852 6.33324 16.4375 6.7243L12.4307 11.2304C12.0829 11.6214 11.5191 11.6214 11.1714 11.2304C10.8237 10.8393 10.8237 10.2053 11.1714 9.81426L13.6582 7.01759H1.56131C1.06955 7.01759 0.670898 6.56926 0.670898 6.01623C0.670898 5.4632 1.06955 5.01488 1.56131 5.01488H13.6582L11.1714 2.21821C10.8237 1.82715 10.8237 1.19313 11.1714 0.802079Z" fill="#939393"></path></svg></div>
+  <div class="swiper-button-prev"><svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.82858 11.1979C5.48085 11.589 4.91707 11.589 4.56935 11.1979L0.562498 6.69183C0.21477 6.30078 0.21477 5.66676 0.562498 5.2757L4.56935 0.769614C4.91708 0.37856 5.48085 0.37856 5.82858 0.769614C6.17631 1.16067 6.17631 1.79469 5.82858 2.18574L3.34176 4.98241L15.4387 4.98241C15.9305 4.98241 16.3291 5.43074 16.3291 5.98377C16.3291 6.5368 15.9305 6.98512 15.4387 6.98512L3.34176 6.98512L5.82858 9.78179C6.17631 10.1728 6.17631 10.8069 5.82858 11.1979Z" fill="#939393"></path></svg></div>
+    </div>
+
+    <!-- Thumbnail Swiper -->
+    <div thumbsSlider="" class="swiper mySwiperallt mySwiper-{{ variant.id }}">
+      <div class="swiper-wrapper">
+        {% for image in variant_gallery %}
+          <div class="swiper-slide" data-varint-name="{{ variant.title }}">
+            <img src="https://artos.us.com/cdn/shop/{{ image }}" alt="Variant Thumbnail {{ forloop.index }}">
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+      
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".variant-slider-wrapper").forEach(function (wrapper) {
+    let variantId = wrapper.getAttribute("data-variant");
+
+    let thumbSlider = new Swiper(".mySwiper-" + variantId, {
+      loop: false, // Disable loop
+    spaceBetween: 10,
+    slidesPerView: 5,
+    freeMode: true,
+    watchSlidesProgress: true,
+    });
+
+    new Swiper(".mySwiper2-" + variantId, {
+      spaceBetween: 10,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      thumbs: {
+        swiper: thumbSlider,
+      },
+    });
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const variantOptions = document.querySelectorAll("[dataimgnamev]"); // Variant selection elements
+  const variantSliders = document.querySelectorAll(".variant-slider-wrapper");
+
+  function getVariantIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get("variant"); // Get the variant ID from the URL
+  }
+
+  function showSelectedVariant(selectedVariantId) {
+    let variantFound = false;
+
+    variantSliders.forEach((slider) => {
+      if (slider.getAttribute("data-variant") === selectedVariantId) {
+        slider.style.display = "block"; // Show matching variant slider
+        variantFound = true;
+      } else {
+        slider.style.display = "none"; // Hide others
+      }
+    });
+
+    if (!variantFound) {
+      console.warn("No matching variant found for ID:", selectedVariantId);
+    }
+  }
+
+  // ✅ Show the correct variant images when the page loads
+  const currentVariantId = getVariantIdFromURL();
+  if (currentVariantId) {
+    showSelectedVariant(currentVariantId);
+  } else {
+    // If no variant is in the URL, show only the first one
+    variantSliders.forEach((slider, index) => {
+      slider.style.display = index === 0 ? "block" : "none";
+    });
+  }
+
+  // ✅ Listen for variant selection changes
+  variantOptions.forEach((option) => {
+    option.addEventListener("click", function () {
+      const selectedVariantId = this.getAttribute("data-variant-id"); // Ensure variant options have this attribute
+
+      if (selectedVariantId) {
+        showSelectedVariant(selectedVariantId);
+
+        // ✅ Update the URL to reflect the new variant
+        const url = new URL(window.location);
+        url.searchParams.set("variant", selectedVariantId);
+        window.history.replaceState({}, "", url);
+      }
+    });
+  });
+
+  // ✅ Update the images when Shopify updates the variant selection (e.g., dropdowns)
+  document.addEventListener("variant:changed", function (event) {
+    const newVariantId = event.detail.variant.id.toString();
+    showSelectedVariant(newVariantId);
+
+    // Update the URL
+    const url = new URL(window.location);
+    url.searchParams.set("variant", newVariantId);
+    window.history.replaceState({}, "", url);
+  });
+});
+
+
+  </script>
+
+
+
+      
+{% comment %}
+<div class="swiper mySwiper2" style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff">
+  <div class="swiper-wrapper">
+    {% for variant in product.variants %}
+      {% assign variant_gallery = variant.metafields.custom.variant_images_gallery.value %}
+
+        {% for image in variant_gallery %}
+          <div class="swiper-slide" dataimg="variant_{{ variant.id }}" data-varint-name="{{ variant.title }}">
+            <img src="https://artos.us.com/cdn/shop/{{ image }}" alt="Variant Image {{ forloop.index }}">
+          </div>
+        {% endfor %}
+
+    {% endfor %}
+  </div>
+  <div class="swiper-button-next"><svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.1714 0.802079C11.5191 0.411026 12.0829 0.411026 12.4307 0.802079L16.4375 5.30817C16.7852 5.69922 16.7852 6.33324 16.4375 6.7243L12.4307 11.2304C12.0829 11.6214 11.5191 11.6214 11.1714 11.2304C10.8237 10.8393 10.8237 10.2053 11.1714 9.81426L13.6582 7.01759H1.56131C1.06955 7.01759 0.670898 6.56926 0.670898 6.01623C0.670898 5.4632 1.06955 5.01488 1.56131 5.01488H13.6582L11.1714 2.21821C10.8237 1.82715 10.8237 1.19313 11.1714 0.802079Z" fill="#939393"></path></svg></div>
+  <div class="swiper-button-prev"><svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.82858 11.1979C5.48085 11.589 4.91707 11.589 4.56935 11.1979L0.562498 6.69183C0.21477 6.30078 0.21477 5.66676 0.562498 5.2757L4.56935 0.769614C4.91708 0.37856 5.48085 0.37856 5.82858 0.769614C6.17631 1.16067 6.17631 1.79469 5.82858 2.18574L3.34176 4.98241L15.4387 4.98241C15.9305 4.98241 16.3291 5.43074 16.3291 5.98377C16.3291 6.5368 15.9305 6.98512 15.4387 6.98512L3.34176 6.98512L5.82858 9.78179C6.17631 10.1728 6.17631 10.8069 5.82858 11.1979Z" fill="#939393"></path></svg></div>
+</div>
+
+<div thumbsSlider="" class="swiper mySwiper">
+  <div class="swiper-wrapper">
+    {% for variant in product.variants %}
+      {% assign variant_gallery = variant.metafields.custom.variant_images_gallery.value %}
+  
+        {% for image in variant_gallery %}
+          <div class="swiper-slide" dataimg="variant_{{ variant.id }}" data-varint-name="{{ variant.title }}">
+            <img src="https://artos.us.com/cdn/shop/{{ image }}" alt="Variant Thumbnail {{ forloop.index }}">
+          </div>
+        {% endfor %}
+   
+    {% endfor %}
+  </div>
+</div>
+{% endcomment %}
+
+
+<script>
+  // document.addEventListener('DOMContentLoaded', function () {
+  //   const swiperThumbs = new Swiper('.mySwiper', {
+  //     loop: true,
+  //     spaceBetween: 10,
+  //     slidesPerView: 4,
+  //     freeMode: true,
+  //     watchSlidesProgress: true,
+  //   });
+
+  //   const swiperMain = new Swiper('.mySwiper2', {
+  //     loop: true,
+  //     spaceBetween: 10,
+  //     navigation: {
+  //       nextEl: '.swiper-button-next',
+  //       prevEl: '.swiper-button-prev',
+  //     },
+  //     thumbs: {
+  //       swiper: swiperThumbs,
+  //     },
+  //   });
+  // });
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Initialize Swipers
+  // const swiperThumbs = new Swiper(".mySwiper", {
+  //   loop: false, // Disable loop
+  //   spaceBetween: 10,
+  //   slidesPerView: 5,
+  //   freeMode: true,
+  //   watchSlidesProgress: true,
+  // });
+
+  // const swiperMain = new Swiper(".mySwiper2", {
+  //   loop: false,
+  //   spaceBetween: 10,
+  //   navigation: {
+  //     nextEl: ".swiper-button-next",
+  //     prevEl: ".swiper-button-prev",
+  //   },
+  //   thumbs: {
+  //     swiper: swiperThumbs,
+  //   },
+  // });
+
+  // Default slider divs
+  const defaultSliderFor = document.querySelector(".productsliderfor");
+  const defaultSliderNav = document.querySelector(".productslidernav");
+
+  // Swiper slider divs
+  const swiperSliderMain = document.querySelector(".mySwiper2");
+  const swiperSliderThumb = document.querySelector(".mySwiper");
+
+  // Function to handle showing/hiding sliders
+  function toggleSliders(showDefault) {
+    if (showDefault) {
+      defaultSliderFor.style.display = "none";
+      defaultSliderNav.style.display = "none";
+      swiperSliderMain.style.display = "block";
+      swiperSliderThumb.style.display = "block";
+    } else {
+      defaultSliderFor.style.display = "none";
+      defaultSliderNav.style.display = "none";
+      swiperSliderMain.style.display = "block";
+      swiperSliderThumb.style.display = "block";
+    }
+  }
+
+  // Show default sliders initially
+  toggleSliders(true);
+
+  // Event listener for variant selection
+  // const variantOptions = document.querySelectorAll("[dataimgnamev]");
+
+  // variantOptions.forEach((option) => {
+  //   option.addEventListener("click", function () {
+  //     // Get selected variant name
+  //     const selectedVariant = this.getAttribute("data-tooltip").toLowerCase();
+
+  //     // Loop through main and thumb Swiper slides
+  //     const mainSlides = document.querySelectorAll(".mySwiper2 .swiper-slide");
+  //     const thumbSlides = document.querySelectorAll(".mySwiper .swiper-slide");
+
+  //     let mainSlidesFound = 0; // Counter for main slides shown
+  //     let thumbSlidesFound = 0; // Counter for thumb slides shown
+
+  //     mainSlides.forEach((slide) => {
+  //       if (
+  //         slide.getAttribute("data-varint-name").toLowerCase() === selectedVariant
+  //       ) {
+  //         slide.style.display = ""; // Reset to default
+  //         mainSlidesFound++;
+  //       } else {
+  //         slide.style.display = "none"; // Hide non-matching slides
+  //       }
+  //     });
+
+  //     thumbSlides.forEach((slide) => {
+  //       if (
+  //         slide.getAttribute("data-varint-name").toLowerCase() === selectedVariant
+  //       ) {
+  //         slide.style.display = ""; // Reset to default
+  //         thumbSlidesFound++;
+  //       } else {
+  //         slide.style.display = "none"; // Hide non-matching slides
+  //       }
+  //     });
+
+  //     // Force Swiper to recalculate dimensions after slide visibility updates
+  //     swiperMain.update();
+  //     swiperThumbs.update();
+
+  //     // Show the appropriate sliders based on variant selection
+  //     if (mainSlidesFound > 0 || thumbSlidesFound > 0) {
+  //       toggleSliders(false);
+  //     } else {
+  //       toggleSliders(true); // If no matching slides, revert to default
+  //     }
+  //   });
+  // });
+
+  // Automatically click on the first variant option
+  if (variantOptions.length > 0) {
+    variantOptions[0].click(); // Simulate a click on the first variant
+  }
+});
+
+</script>
+
+
+
+
+
+      
+      {%- capture slideshow_images -%}
+      {%- for image in product.images -%}
+        {%- if image.alt == 'featured' or image.alt == 'featured mobile' -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {%- if image.id == product.selected_or_first_available_variant.image.id -%}
+          {%- assign initial_image_index = image_count -%}
+          {%- assign initial_image_id = image.id -%}
+        {%- endif -%}
+
+        {%- include 'image-size', sizes: '200,400,600,700,800,900,1000,1200,1400,1600', image: image -%}
+
+        {%- assign is_video = false -%}
+
+        {%- if image.alt contains 'youtube.com/embed' or image.alt contains 'player.vimeo.com' -%}
+          {%- assign is_video = true -%}
+        {%- endif -%}
+
+        <div id="Image{{ image.id }}" class="Product__SlideItem Product__SlideItem--{% if is_video %}video{% else %}image{% endif %} Carousel__Cell {% if initial_image_id == image.id %}is-selected{% endif %}"
+             {% if is_video %}data-action="open-modal" aria-controls="modal-video-{{ image.id }}"{% endif %}
+             {% unless is_video %}data-image-position-ignoring-video="{% increment image_position_without_video %}"{% endunless %}
+             data-image-position="{% increment image_position %}"
+             data-image-id="{{ image.id }}" dataimgname="{{ image.alt | escape }}">
+          <div class="AspectRatio AspectRatio--withFallback" style="padding-bottom: {{ 100.0 | divided_by: image.aspect_ratio }}%; --aspect-ratio: {{ image.aspect_ratio }};">
+            {% assign image_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+
+            <img class="Image--lazyLoad Image--fadeIn"
+                 {% if initial_image_id == image.id %}src="{{ image | img_url: '250x' }}"{% endif %}
+                 data-src="{{ image_url }}"
+                 data-widths="[{{ supported_sizes }}]"
+                 data-sizes="auto"
+                 data-expand="-100"
+                 alt="{{ image.alt | escape }}"
+                 data-max-width="{{ image.width }}"
+                 data-max-height="{{ image.height }}"
+                 data-original-src="{{ image | img_url: 'master' }}">
+
+            <span class="Image__Loader"></span>
+
+            {%- if is_video -%}
+              <button type="button" class="Video__PlayButton" aria-label="{{ 'home_page.featured_video.play' | t }}">{% include 'icon' with 'play' %}</button>
+            {%- endif -%}
+
+            <noscript>
+              <img src="{{ image | img_url: '800x' }}" alt="{{ image.alt | escape }}">
+            </noscript>
+          </div>
+        </div>
+
+        {%- assign image_count = image_count | plus: 1 -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+      <div class="slider productsliderfor">
+          {{ slideshow_images }}
+      </div>
+      {%- capture slideshow_nav -%}
+          {%- if image_count > 1 -%}
+            {%- if section.settings.show_thumbnails -%}
+                  {%- for image in product.images -%}
+                    {%- if image.alt == 'featured' or image.alt == 'featured mobile' -%}
+                      {%- continue -%}
+                    {%- endif -%}
+
+                    {%- assign is_video = false -%}
+
+                    {%- if image.alt contains 'youtube.com/embed' or image.alt contains 'player.vimeo.com' -%}
+                      {%- assign is_video = true -%}
+                    {%- endif -%}
+
+                    {%- if section.settings.stack_images -%}
+                      <a href="#Image{{ image.id }}" data-image-id="{{ image.id }}" class="Product__SlideshowNavImage {% if is_video %}Product__SlideshowNavImage--video{% endif %} AspectRatio {% if forloop.first %}is-selected{% endif %}" style="--aspect-ratio: {{ image.aspect_ratio }}">
+                        <img src="{{ image | img_url: '160x' }}">
+
+                        {%- if is_video -%}
+                          <button type="button" class="Product__SlideshowNavPlay" data-action="play-video" aria-label="{{ 'home_page.featured_video.play' | t }}">{% include 'icon' with 'play' %}</button>
+                        {%- endif -%}
+                      </a>
+                    {%- else -%}
+                      <span data-image-id="{{ image.id }}" class="Product__SlideshowNavImage {% if is_video %}Product__SlideshowNavImage--video{% endif %} AspectRatio {% if forloop.first %}is-selected{% endif %}" style="--aspect-ratio: {{ image.aspect_ratio }}" dataimgname="{{ image.alt | escape }}">
+                        <img src="{{ image | img_url: '160x' }}">
+
+                        {%- if is_video -%}
+                          <button type="button" class="Product__SlideshowNavPlay" data-action="play-video" aria-label="{{ 'home_page.featured_video.play' | t }}">{% include 'icon' with 'play' %}</button>
+                        {%- endif -%}
+                      </span>
+                    {%- endif -%}
+                  {%- endfor -%}
+            {%- endif -%}
+
+            {%- if section.settings.stack_images -%}
+                <div class="Product__SlideshowNavScroller">
+                  {%- for image in product.images -%}
+                    {%- if image.alt == 'featured' or image.alt == 'featured mobile' -%}
+                      {%- continue -%}
+                    {%- endif -%}
+
+                    <a href="#Image{{ image.id }}" class="Product__SlideshowNavDot {% if forloop.first %}is-selected{% endif %}"></a>
+                  {%- endfor -%}
+                </div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endcapture -%}
+      <div class="slider productslidernav">
+          {{ slideshow_nav }}
+      </div>
+    </div>
+
+
+
+
+    
+    {%- capture product_aside -%}
+      
+    
+
+
+      {%- comment -%}
+      --------------------------------------------------------------------------------------------------------------------
+      PRODUCT WEAR IT WITH
+
+      We allow merchants to add a tag that looks like __with:product-handle to feature an additional product
+      --------------------------------------------------------------------------------------------------------------------
+      {%- endcomment -%}
+
+      {%- for tag in product.tags -%}
+        {%- if tag contains '__with' -%}
+          {%- assign product_handle = tag | split: '__with:' | last -%}
+          {%- assign associated_product = all_products[product_handle] -%}
+          {%- include 'bold-product' with product, hide_action: 'break', output: 'none' -%}
+          {%- if associated_product != empty -%}
+            <div class="Section Section--spacingNormal">
+              <header class="SectionHeader SectionHeader--center">
+                <h3 class="SectionHeader__Heading Heading u-h4">{{ 'product.buy_it_with.title' | t }}</h3>
+              </header>
+              {% include 'product-item', product: associated_product, use_horizontal: true, show_labels: false, show_product_info: true, show_vendor: false, show_price_on_hover: false %}
+            </div>
+            {%- break -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    <div class="Product__InfoWrapper">
+      <div class="Product__Info {% if image_count == 0 %}Product__Info--noGallery{% endif %}">
+        <div class="Container">
+          <p class="product-category-title">{{ collection.title }}</p>
+          {%- include 'product-meta', show_description: true -%}
+
+          {%- if product.template_suffix != 'coming-soon' -%}
+            {%- include 'product-form' -%}
+          {%- endif -%}
+          
+         
+          
+          {%- if section.settings.description_below_add_to_cart -%}
+            <div class="ProductMeta__Description">
+              <div class="Rte">
+                {{ product.description | truncatewords: 15  }}
+              </div>
+              
+            </div>
+          {%- endif -%}
+          {% comment %}
+          {%- if product_aside != blank and image_count > 0 -%}
+            <div class="Product__QuickNav hidden-pocket">
+              <div class="Product__QuickNavWrapper">
+                <a href="#ProductAside" class="Heading Link Link--secondary u-h7">{{ 'product.form.view_info' | t }} {% include 'icon' with 'select-arrow-right' %}</a>
+                <a href="#ProductGallery" class="Heading Link Link--secondary u-h7">{{ 'product.form.view_images' | t }} {% include 'icon' with 'select-arrow-right' %}</a>
+              </div>
+            </div>
+          {%- endif -%}
+          {% endcomment %}
+        </div>
+      </div>
+
+      {%- if action_list_items != blank -%}
+        <div class="Product__ActionList hidden-pocket">
+          {{ action_list_items }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if product_aside != blank -%}
+      <div class="Product__Aside">
+        <span id="ProductAside" class="Anchor"></span>
+        {{- product_aside -}}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%}
+  --------------------------------------------------------------------------------------------------------------------
+  OFF SCREEN ELEMENTS
+  --------------------------------------------------------------------------------------------------------------------
+  {%- endcomment -%}
+
+  {{- product_popovers -}}
+  {{- product_modals -}}
+</section>
+{% comment %}Start automatically added Judge.me widget{% endcomment %}
+  {% comment %}{% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: true, product: product %}{% endcomment %}
+{% comment %}End automatically added Judge.me widget{% endcomment %}
+
+
+
+
+{%- comment -%}
+--------------------------------------------------------------------------------------------------------------------
+FEATURED IMAGE
+
+We allow merchants to use one image as a "featured image" by adding the alt tag "featured"
+--------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- for image in product.images -%}
+  {%- if image.alt == 'featured' -%}
+    {%- assign desk_featured_image = image -%}
+  {%- endif -%}
+
+  {%- if image.alt == 'featured mobile' -%}
+    {%- assign mobile_featured_image = image -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if desk_featured_image or mobile_featured_image -%}
+  {%- assign mobile_featured_image = mobile_featured_image | default: desk_featured_image -%}
+  {%- assign desk_featured_image = desk_featured_image | default: mobile_featured_image -%}
+
+  <div class="Product__FeatureImageWrapper" style="background: url({{ desk_featured_image | img_url: '1x1', format: 'jpg' }})">
+    <div class="Product__FeatureImage Product__FeatureImage--{{ section.settings.featured_image_size }} Image--lazyLoad Image--zoomOut hide-no-js" data-expand="-25" data-bgset="{{ mobile_featured_image | img_url: 'x850' }} [(max-width: 640px)] | {{ desk_featured_image | img_url: '1500x' }}"></div>
+
+    <noscript>
+      <div class="Product__FeatureImage Product__FeatureImage--{{ section.settings.featured_image_size }}" style="background-image: url({{ desk_featured_image | img_url: '1500x' }})"></div>
+    </noscript>
+  </div>
+
+  <style>
+    #shopify-section-{{ section.id }} + .shopify-section--bordered {
+      border-top: 0;
+    }
+  </style>
+{%- else -%}
+  <style>
+    /* Very ugly haha */
+
+    @media screen and (max-width: 640px) {
+      #shopify-section-{{ section.id }} + .shopify-section--bordered {
+        border-top: 0;
+      }
+
+      #shopify-section-{{ section.id }} + .shopify-section--bordered > .Section {
+        padding-top: 0;
+      }
+    }
+  </style>
+{%- endif -%}
+
+{%- comment -%}
+--------------------------------------------------------------------------------------------------------------------
+MODALS
+
+If we have some videos, we implement them as modal
+--------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- for image in product.images -%}
+  {%- if image.alt contains 'youtube.com/embed' or image.alt contains 'player.vimeo.com' -%}
+    <div id="modal-video-{{ image.id }}" class="Modal Modal--fullScreen Modal--videoContent" aria-hidden="true" role="dialog" data-scrollable>
+      <div class="Modal__Content">
+        <div class="Container Container--narrow">
+          <div class="VideoWrapper">
+            {% if image.alt contains 'youtube.com/embed' %}
+              <iframe class="Image--lazyLoad" data-src="{{ image.alt }}?autoplay=1&showinfo=0&controls=1&rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>
+            {% else %}
+              <iframe class="Image--lazyLoad" data-src="{{ image.alt }}?autoplay=1&portrait=0&byline=0&color={{ settings.accent_color | remove_first: '#' }}" frameborder="0"></iframe>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <button class="Modal__Close Modal__Close--outside" data-animate-bottom data-action="close-modal">{% include 'icon' with 'close' %}</button>
+    </div>
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%}
+--------------------------------------------------------------------------------------------------------------------
+PHOTO SWIPE
+
+This is the root container for the zoom functionality. Must not be removed, as order element is important.
+--------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+
+  <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+      <!-- Container that holds slides. Do not remove as content is dynamically added -->
+      <div class="pswp__container">
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+      </div>
+
+      <!-- Main UI bar -->
+      <div class="pswp__ui pswp__ui--hidden">
+        <button class="pswp__button pswp__button--prev RoundButton" data-animate-left title="{{ 'product.slideshow.previous' | t }}">{% include 'icon' with 'arrow-left' %}</button>
+        <button class="pswp__button pswp__button--close RoundButton RoundButton--large" data-animate-bottom title="{{ 'product.slideshow.close' | t }}">{% include 'icon' with 'close' %}</button>
+        <button class="pswp__button pswp__button--next RoundButton" data-animate-right title="{{ 'product.slideshow.next' | t }}">{% include 'icon' with 'arrow-right' %}</button>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script type="text/javascript">
+   $('.productsliderfor').slick({
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+    fade: true,
+    asNavFor: '.productslidernav',
+    infinite: false,
+    prevArrow: '<div class="slide-arrow prev-arrow"><svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.82858 11.1979C5.48085 11.589 4.91707 11.589 4.56935 11.1979L0.562498 6.69183C0.21477 6.30078 0.21477 5.66676 0.562498 5.2757L4.56935 0.769614C4.91708 0.37856 5.48085 0.37856 5.82858 0.769614C6.17631 1.16067 6.17631 1.79469 5.82858 2.18574L3.34176 4.98241L15.4387 4.98241C15.9305 4.98241 16.3291 5.43074 16.3291 5.98377C16.3291 6.5368 15.9305 6.98512 15.4387 6.98512L3.34176 6.98512L5.82858 9.78179C6.17631 10.1728 6.17631 10.8069 5.82858 11.1979Z" fill="#939393"/></svg></div>',
+    nextArrow: '<div class="slide-arrow next-arrow"><svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.1714 0.802079C11.5191 0.411026 12.0829 0.411026 12.4307 0.802079L16.4375 5.30817C16.7852 5.69922 16.7852 6.33324 16.4375 6.7243L12.4307 11.2304C12.0829 11.6214 11.5191 11.6214 11.1714 11.2304C10.8237 10.8393 10.8237 10.2053 11.1714 9.81426L13.6582 7.01759H1.56131C1.06955 7.01759 0.670898 6.56926 0.670898 6.01623C0.670898 5.4632 1.06955 5.01488 1.56131 5.01488H13.6582L11.1714 2.21821C10.8237 1.82715 10.8237 1.19313 11.1714 0.802079Z" fill="#939393"/></svg></div>', 
+  });
+  $('.productslidernav').slick({
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    asNavFor: '.productsliderfor',
+    dots: false,
+    centerMode: false,
+    infinite: false,
+    Padding: '20px',
+    focusOnSelect: true,
+    arrows: false
+  });
+  $(document).on('click', '.ColorSwatch', function(){
+      var customVal = $(this).attr('data-position');
+      var slick_index = customVal;
+      console.log(slick_index);
+      $('.productsliderfor').slick('slickGoTo', slick_index - 1, false);
+  });
+</script>
+
+
+
+<script>
+// document.addEventListener("DOMContentLoaded", function () {
+//   // Select all variant options
+//   const variantOptions = document.querySelectorAll("[dataimgnamev]");
+
+//   // Add click event listener to each variant option
+//   variantOptions.forEach((option) => {
+//     option.addEventListener("click", function () {
+//       // Get the selected variant name from the data-tooltip attribute
+//       const selectedVariant = this.getAttribute("data-tooltip");
+
+//       // Select all Swiper slides
+//       const swiperSlides = document.querySelectorAll(".swiper-slide");
+
+//       // Loop through each Swiper slide
+//       swiperSlides.forEach((slide) => {
+//         // If the data-varint-name matches the selected variant, show the slide
+//         if (slide.getAttribute("data-varint-name") === selectedVariant) {
+//           slide.style.display = "block"; // Make slide visible
+//         } else {
+//           slide.style.display = "none"; // Hide slide if it doesn't match
+//         }
+//       });
+
+//       // Update the Swiper instance after slides are hidden/shown
+//       updateSwiper();
+//     });
+//   });
+
+//   // Initialize Swiper
+//   // const mySwiper = new Swiper(".swiper", {
+//   //   loop: false, // Disable looping if not required
+//   //   navigation: {
+//   //     nextEl: ".swiper-button-next",
+//   //     prevEl: ".swiper-button-prev",
+//   //   },
+//   // });
+
+//   // Function to update Swiper when slides are hidden/shown
+//   function updateSwiper() {
+//     mySwiper.update(); // Updates the Swiper instance
+//   }
+// });
+
+
+</script>
+
+
+{% schema %}
+{
+  "name": "Product page",
+  "class": "shopify-section--bordered",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Show social sharing buttons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "Show SKU",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "description_below_add_to_cart",
+      "label": "Description below add to cart",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "selector_mode",
+      "label": "Selector type",
+      "options": [
+        {
+          "value": "block",
+          "label": "Block"
+        },
+        {
+          "value": "dropdown",
+          "label": "Dropdown"
+        }
+      ],
+      "default": "dropdown"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_swatch",
+      "label": "Show color swatch",
+      "default": false,
+      "info": "Some colors appear white? [Learn more](http://support.maestrooo.com/article/80-product-uploading-custom-color-for-color-swatch)."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_carousel",
+      "label": "Show color carousel",
+      "info": "A pop-up selector with variant images for choosing colors. Only enables when color swatch is disabled.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quantity_selector",
+      "label": "Show quantity selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_inventory_quantity",
+      "label": "Show inventory quantity",
+      "info": "Make sure that your inventory is tracked. [Learn more](https://help.shopify.com/manual/products/inventory#set-up-inventory-tracking).",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "inventory_quantity_threshold",
+      "label": "Inventory quantity threshold",
+      "info": "Only show inventory quantity if below threshold. Choose 0 to always show.",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_in_button",
+      "label": "Show price in add to cart button",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_button",
+      "label": "Show dynamic checkout button",
+      "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product images"
+    },
+    {
+      "type": "select",
+      "id": "image_size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "fill",
+          "label": "Fill screen"
+        }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "checkbox",
+      "id": "stack_images",
+      "label": "Stack images on desktop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_thumbnails",
+      "label": "Show thumbnails on desktop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_zoom",
+      "label": "Enable zoom",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Reviews"
+    },
+    {
+      "type": "paragraph",
+      "content": "You need to install [Shopify's free Product Reviews](https://apps.shopify.com/product-reviews) app before enabling this option."
+    },
+    {
+      "type": "checkbox",
+      "id": "reviews_enabled",
+      "label": "Enable",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Featured image"
+    },
+    {
+      "type": "paragraph",
+      "content": "You can highlight an image after product tabs by adding the ALT tag \"featured\" to a given image. [Learn more](http://support.maestrooo.com/article/152-product-highlight-a-featured-image)."
+    },
+    {
+      "type": "select",
+      "id": "featured_image_size",
+      "label": "Section size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "large"
+    }
+  ]
+}
+{% endschema %}

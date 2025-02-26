@@ -1,0 +1,54 @@
+{% if section.settings.show_product_imagewithtext %}
+<div class="product-section-imagewithtest-section">
+  <div class="Container">
+    <div class="text-block">
+      {% if section.settings.content_title != blank %}<h3 class="title-section">{{ section.settings.content_title }}</h3>{% endif %}
+      {% if section.settings.buttontext %}<a href="{{ section.settings.button_link }}">{{ section.settings.buttontext }}</a>{% endif %}
+    </div>
+    {% if section.settings.content_image != blank %}
+    <div class="image-block">
+      <img class="Image--lazyLoad Image--fadeIn" data-src="{{ section.settings.content_image | img_url: 'master' }}" data-widths="[{{ section.settings.content_image.width }}]" data-sizes="auto" alt="{{ section.settings.content_image.alt | escape }}">
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% schema %}
+  {
+    "name": "Section name",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_product_imagewithtext",
+        "label": "Show Image with Text block",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "content_title",
+        "label": "Heading"
+      },
+      {
+        "type": "text",
+        "id": "buttontext",
+        "label": "Button Title"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      },
+      {
+        "type": "image_picker",
+        "id": "content_image",
+        "label": "Logo image"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

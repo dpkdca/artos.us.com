@@ -1,0 +1,51 @@
+{% if section.settings.show_block == true %}
+<div class="aboutus-sales-section">
+  <div class="container">
+    <div class="center">
+      {% if section.settings.title != blank %}<h2 class="h2-main-title">{{ section.settings.title }}</h2>{% endif %}
+      <div class="aboutus-sales-blocks">
+      {% for block in section.blocks %}
+        {{ block.settings.paragraph }}
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% schema %}
+  {
+    "name": "Text with Content",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"  
+      },
+      {
+        "type": "checkbox",
+        "id": "show_block",
+        "label": "Show Text with content",
+        "default": true
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "Content",
+        "settings": [
+           {
+              "type": "richtext",
+              "id": "paragraph",
+              "label": "Paragraph"  
+          } 
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

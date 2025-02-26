@@ -1,0 +1,51 @@
+<div class="home-section-bgimagewithtest-section {{ section.settings.customclass }}" style="background-image: url({{ section.settings.bg_image | img_url: 'master' }})">
+  <div class="Container">
+    <div class="text-block center">
+      {% if section.settings.content_title != blank %}<h3 class="h1-main-title">{{ section.settings.content_title }}</h3>{% endif %}
+      {% if section.settings.buttontext %}<a class="btn primary-btn large-primary-btn" href="{{ section.settings.button_link }}">{{ section.settings.buttontext }}</a>{% endif %}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "BG image with text",
+    "settings": [
+      {
+        "type": "text",
+        "id": "customclass",
+        "label": "Class"
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_image",
+        "label": "Background image"
+      },
+      {
+        "type": "text",
+        "id": "content_title",
+        "label": "Heading"
+      },
+      {
+        "type": "text",
+        "id": "buttontext",
+        "label": "Button Title"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      }
+    ],
+    "presets": [
+      {
+        "name": "BG image with text"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

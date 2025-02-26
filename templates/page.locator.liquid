@@ -1,0 +1,510 @@
+
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBciaqsXFugfrvIVb42n-_1lHDTmiUzoWk&callback=initMap"
+        type="text/javascript"></script>
+
+  
+ <script src="https://system.eu2.netsuite.com/core/media/media.nl?id=834498&c=3599012&h=a1d87d2ad7b20dfacbb0&_xt=.js" type="text/javascript"></script>
+  
+<script>
+
+  $(".menu-toggle").click(function(){
+        $("body").toggleClass("show-nav");
+        $('.add-email-option:empty').remove();
+    });
+ 
+</script>
+
+
+<style>
+  span.add-phone-option { display: block; color: #000; position:relative; padding-left: 23px; }
+  span.add-website-option {
+    display: block;
+    color: #000000c2;
+    font-size: 12px;
+    font-weight: 600;
+    padding-left: 10px;
+}
+  span.add-email-option { color: #9e0052; position:relative; padding-left: 23px;}
+  div#locationSelect strong {
+    display: block;
+    background: #490574b8;
+    color: #fff;
+    font-weight: 400;
+    padding: 15px 11px;
+    font-family: "Montserrat","HelveticaNeue","Helvetica Neue",sans-serif;
+    font-size: 17px;
+    text-transform: uppercase;
+    width: 100%;
+    line-height: 17px;
+}
+  
+  div#locationSelect p span.add:after {
+    position: absolute;
+    content: "";
+    background: url(https://cdn.shopify.com/s/files/1/0685/9227/files/loc.png?12035381919544764966);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 0;
+}
+  
+  div#locationSelect p span.add-phone-option:after {
+    position: absolute;
+    content: "";
+    background: url(https://cdn.shopify.com/s/files/1/0685/9227/files/phone-icon.png?12035381919544764966);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 16px;
+    height: 16px;
+    top: 3px;
+    left: 0;
+}
+ div#locationSelect p span.add-email-option:after {
+    position: absolute;
+    content: "";
+    background: url(https://cdn.shopify.com/s/files/1/0685/9227/files/email.png?12035381919544764966);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 20px;
+    height: 16px;
+    top: 1px;
+    left: 0px;
+}
+  
+div#locationSelect p span.add-name {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 13px;
+}
+div#locationSelect p span.add {
+   font-size: 13px;
+    line-height: 21px !important;
+    display: block;
+    margin-top: 5px;
+    position: relative;
+    padding: 0px 30px 0px 23px;
+}
+div#locationSelect p {
+    padding: 15px 3px 15px 15px;
+    margin: 0px;
+    border-bottom: 1px solid #490574;
+    background: #edededeb;
+}
+  .locator-input p {
+    font-size: 15px;
+    font-family:"Montserrat","HelveticaNeue","Helvetica Neue",sans-serif;
+    line-height: 21px;
+    box-sizing: border-box;
+    width: 95%;
+    color: #000000;
+}
+  dl#sample:hover dd ul {
+    display: block !important;
+}
+  
+  
+       .select-sec {
+          width: 95% !important;
+        }
+       .store-locator h1 {
+          margin-bottom: 20px;
+          font-family: "Montserrat","HelveticaNeue","Helvetica Neue",sans-serif;
+          font-weight: 500;
+          font-size: 22px;
+          color: #490574;
+          text-transform: uppercase;
+         }
+       .locator-input input {
+           width: 95% !important;
+           margin-bottom: 8px;
+           font-family:"Montserrat","HelveticaNeue","Helvetica Neue",sans-serif;
+       }
+       
+        .locator-input select {
+           width: 95% !important;
+          margin-bottom: 8px;
+       }
+
+        .locator-input {
+           width: 100%;
+         }
+      .locator-inner {
+         width: 35%;
+         float: left;
+        }
+       div#map {
+          width: 65% !important;
+          float: left;
+         border: 5px solid #e4dede;
+         }
+        .store-locator {
+            width: 85%;
+            margin: 0 auto;
+            padding: 30px 0px 50px 40px !important;
+            overflow: hidden;
+        }
+        div#map {
+          
+          height: 400px !important;
+        } 
+     input[type="text"], select{
+         border-radius: 0;
+         width: 35%;
+         display: inline-block;
+         border: 1px solid #777777;
+         padding:12px;
+         text-transform: uppercase;
+         font-size: 14px;
+     }
+     input[type="button"] {
+        background: #490574;
+        color: #fff;
+        border: 1px solid #490574;
+        width: 28%;
+        border-radius: 0;
+        padding:12px;
+        text-transform:uppercase;
+     }
+  @media (max-width:768px) {
+       .grid .store-locator { padding: 30px 0px 50px 0px !important; }
+       .grid .store-locator .locator-inner { width: 100%; }
+       .store-locator .select-sec { width: 100% !important; }
+       .store-locator #map { width: 100% !important; }
+       .locator-input input { width: 100% !important; }
+       .locator-input select { width: 100% !important; } 
+       .locator-input input[type="button"] { width: 100% !important; }
+  
+  }
+   </style>
+
+   
+   
+       
+     <script type="text/javascript">
+    //<![CDATA[
+    var map;
+    var markers = [];
+    var infoWindow;
+    var locationSelect;
+
+    function load() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: new google.maps.LatLng(40, -100),
+        zoom: 1,
+        mapTypeId: 'roadmap',
+        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+      });
+      infoWindow = new google.maps.InfoWindow();
+
+      locationSelect = document.getElementById("locationSelect");
+      locationSelect.onchange = function() {
+        var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
+        if (markerNum != "none"){
+          google.maps.event.trigger(markers[markerNum], 'click');
+        }
+      };
+   }
+
+   function searchLocations() {
+     
+     var address = document.getElementById("addressInput").value;
+
+
+     var geocoder = new google.maps.Geocoder();
+     geocoder.geocode({address: address}, function(results, status) {
+       if (status == google.maps.GeocoderStatus.OK) {
+        searchLocationsNear(results[0].geometry.location);
+       } else {
+         console.log(address + ' not found');
+       } 
+     }); 
+   }
+
+   function clearLocations() {
+     infoWindow.close();
+     for (var i = 0; i < markers.length; i++) {
+       markers[i].setMap(null);
+     }
+     markers.length = 0;
+
+     locationSelect.innerHTML = "";
+     var option = document.createElement("strong");
+     option.value = "none";
+     option.innerHTML = "See all results:";
+     locationSelect.appendChild(option);
+   }
+
+   var data = '';
+   
+ 
+    function searchLocationsNear(center) {
+     
+    getNearBy(center,function(err,data1){
+      
+      if(err){
+        return;
+      }
+    
+         clearLocations();
+
+           var bounds = new google.maps.LatLngBounds();
+           for (var i = 0; i < data1.length; i++) {
+             var name = data1[i].name;
+             var address = data1[i].address;
+             var distance = parseFloat(data1[i].distance);
+      var phone = data1[i].phone;
+      var email = data1[i].email;
+    //  var website = data1[i].website;
+             var latlng = new google.maps.LatLng(
+                  parseFloat(data1[i].lat),
+                  parseFloat(data1[i].lng));
+             createOption(name, distance, i,address,phone,email/*,website*/);
+             createMarker(latlng, name, address,phone,email/*,website*/);
+             bounds.extend(latlng);
+
+           }
+           map.fitBounds(bounds);
+           locationSelect.style.visibility = "visible";
+           locationSelect.onchange = function() {
+             var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
+             google.maps.event.trigger(data1[markerNum], 'click');
+           };
+
+      
+    });
+         }
+
+    function createMarker(latlng, name, address,phone,email/*,website*/) {
+      var html = "<b>" + name + "</b> <br/>" + address+'<br/><span class="add-phone">'+phone+'</span><br/><span class="add-email">'+email+'</span><br/>';
+      var marker = new google.maps.Marker({
+        map: map,
+        position: latlng
+      });
+      google.maps.event.addListener(marker, 'click', function() {
+        infoWindow.setContent(html);
+        infoWindow.open(map, marker);
+      });
+      markers.push(marker);
+    }
+    
+ function createOption(name, distance, num,address,phone,email,website) {
+      var option = document.createElement("p");
+      option.value = num;
+      option.innerHTML = '<span class="add-name">'+name+'</span><span class="add">'+address+'</span><span class="add-phone-option">'+phone+'</span><span class="add-email-option">'+email+'</span>';
+      locationSelect.appendChild(option);
+    }
+
+
+
+function downloadUrl(url, callback) {
+      var request = window.ActiveXObject ?
+          new ActiveXObject('Microsoft.XMLHTTP') :
+          new XMLHttpRequest;
+
+      request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+          request.onreadystatechange = doNothing;
+          callback(request.responseText, request.status);
+        }
+      };
+
+      request.open('GET', url, true);
+      request.send(null);
+    }
+
+    function parseXml(str) {
+      if (window.ActiveXObject) {
+        var doc = new ActiveXObject('Microsoft.XMLDOM');
+        doc.loadXML(str);
+        return doc;
+      } else if (window.DOMParser) {
+        return (new DOMParser).parseFromString(str, 'text/xml');
+      }
+    }
+
+    function doNothing() {}
+    
+    function getNearBy(center,callback)
+    {
+    
+    var zipcode = document.getElementById("addressInput").value
+    var radius = document.getElementById('radiusSelect').value;
+    var maxDistance = 0;
+    if(radius == '25'){
+      maxDistance =  40233.6
+    }else if(radius == '100')
+    {
+      maxDistance = 160934
+    }else if(radius == '200')
+    {
+      maxDistance = 321869
+    }
+       var placeGet = ((String(center) .replace('(','')).replace(')','')).split(',');
+       var placeLat = Number(placeGet[0])
+        var placelng = Number(placeGet[1])
+      
+      var latLngA = new google.maps.LatLng({lat: placeLat, lng: placelng});
+
+var url = 'https://forms.eu2.netsuite.com/app/site/hosting/scriptlet.nl?script=291&deploy=1&compid=3599012&h=751dcde027ee4322c3f5&zipcode='+zipcode;
+        $.ajax({
+          url: url+"&data=" +JSON.stringify(center),
+          jsonpCallback: "callback",
+          dataType: "jsonp",
+          jsonp: true,
+          success: function(data){ 
+
+   
+          var data1 = data;
+        var obj1=[];
+        var obj2={};
+      var totalCount = data1.length;
+        var obj1=[];
+
+          data1.forEach(function(customerData){
+            
+        
+            customerData = JSON.parse(JSON.stringify(customerData))
+          var obj = customerData;
+          var name = obj.name;
+
+          var address = obj.address;
+          var phone = obj.phone;
+      var email = obj.email;
+    //  var website = obj.website;
+
+          
+
+                     var latB = Number(obj.lat);
+                      var lanB = Number(obj.lng);
+                     var latLngB = new google.maps.LatLng({lat:latB, lng:lanB});
+                     
+            
+          var pointA = {};
+          pointA.latitude = placeLat;
+          pointA.longitude = placelng;
+
+          var pointB = {};
+          pointB.latitude = latB;
+          pointB.longitude = lanB;
+              var distance =  calculateDistance(pointA, pointB);
+
+                  if(Number(maxDistance) > Number(distance)){
+                obj1.push(
+                         {
+                    "name":name,
+                    "address":address,
+                    "lat":Number(latB),
+                    "lng":Number(lanB),
+                    "distance":distance,
+                "email":email,
+                "phone":phone,
+            //    "website":website,
+
+                  }
+                         );
+                  }
+                     checkIsComplete();
+
+
+                   });
+   
+          
+          function checkIsComplete()
+          {
+            totalCount--;
+            if(totalCount<=0)
+            {
+          
+            var distanceArr = Object.keys(obj2);
+            distanceArr = distanceArr.sort();
+            console.log(distanceArr)
+            for(k=distanceArr.length-1;k>0;k--){
+              var key = distanceArr[k];
+              
+              obj1.push(obj2[key]);
+            }
+            
+            
+              callback(null,obj1);
+            }
+          }
+          
+    
+          } });
+          
+    }
+
+function calculateDistance(pointA, pointB) {
+
+
+  const lat1 = pointA.latitude;
+  const lon1 = pointA.longitude;
+
+  const lat2 = pointB.latitude;
+  const lon2 = pointB.longitude;
+
+
+  const R = 6371e3; // earth radius in meters
+  const φ1 = lat1 * (Math.PI / 180);
+  const φ2 = lat2 * (Math.PI / 180);
+  const Δφ = (lat2 - lat1) * (Math.PI / 180);
+  const Δλ = (lon2 - lon1) * (Math.PI / 180);
+
+  const a = (Math.sin(Δφ / 2) * Math.sin(Δφ / 2)) +
+            ((Math.cos(φ1) * Math.cos(φ2)) * (Math.sin(Δλ / 2) * Math.sin(Δλ / 2)));
+  
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const distance = R * c;
+  return distance; // in meters
+}
+    
+  </script>
+
+
+  <div class="grid">
+
+  <div class="store-locator">
+
+    <h1>{{ page.title }}</h1>
+
+    <div class="rte">
+     
+       <div style="margin:0px; padding:0px;" onload="load()">
+         <div class="locator-inner">
+    <div class="locator-input">
+     <!--  <p>You can find Lottie stockists in your nearest toy store, online toy store, doll store, book store or department store by entering your City or Zip or Post code here.</p> -->
+     <input type="text" id="addressInput" placeholder="Enter a zipcode" size="10"/>
+     <select id="radiusSelect">
+      <option value="25" selected>25mi</option>
+      <option value="100">100mi</option>
+      <option value="200">200mi</option>
+    </select> 
+
+    <input type="button" onclick="searchLocations()" value="Find Stores"/>
+    </div>
+    <div class="select-sec">
+       <div id="locationSelect" style="width:100%;visibility:hidden"></div>
+    </div> 
+      
+           
+     </div>
+         </div>     
+    <div id="map" style="width: 100%; height: 80%"></div>
+  </div>
+      
+    </div>
+
+  </div>
+
+<script>
+setInterval(function(){ 
+  
+ $('.add-phone-option:empty').remove(); 
+ $('.add-email-option:empty').remove(); 
+}, 100);
+  </script>

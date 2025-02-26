@@ -1,0 +1,63 @@
+<div class="aboutus-employee-section">
+  <div class="container">
+    <div class="center header-about-block">
+      {% if section.settings.title != blank %}<h2 class="h2-main-title">{{ section.settings.title }}</h2>{% endif %}
+      {% if section.settings.content %}<p>{{ section.settings.content }}</p>{% endif %}
+    </div>
+    <div class="aboutus-employee-blocks">
+      {% for block in section.blocks %}
+        <div class="aboutus-employee-block">
+          {% if block.settings.aboutimage != blank  %}<img src="{{ block.settings.aboutimage | img_url: 'master' }}" alt="{{ block.settings.aboutimage.alt }}">{% endif %}
+          {% if block.settings.abouttitle != blank %}<h6>{{ block.settings.abouttitle }}</h6>{% endif %}
+          {% if block.settings.aboutsubtitle != blank %}<span>{{ block.settings.aboutsubtitle }}</span>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Employee detail",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "heading"
+      },
+      {
+        "type": "textarea",
+        "id": "content",
+        "label": "Sub heading"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "Text with image block",
+        "settings": [
+          {
+            "type": "text",
+            "id": "abouttitle",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "aboutsubtitle",
+            "label": "Sub Title"
+          },
+          {
+              "type": "image_picker",
+              "id": "aboutimage",
+              "label": "Image"
+          }
+        ]
+      } 
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

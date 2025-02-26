@@ -1,0 +1,113 @@
+<div class="contact-address-section" style="background-color: {{ section.settings.bgcolor }}">
+  <div class="container">
+    <div class="center">
+      {% if section.settings.title != blank %}
+        <h2 class="h2-main-title">{{ section.settings.title }}</h2>
+      {% endif %}
+      {% if section.settings.content != blank %}
+        <p class="w-50">{{ section.settings.content }}</p>
+      {% endif %}
+    </div>
+    <div class="contact-address-map-blocks">
+      <div class="contact-address-block-main">
+        <h5 class="contact-address-subtitle">{{ section.settings.subtitle }}</h5>
+        <ul class="contact-address-blocks">
+          {% for block in section.blocks %}
+            <li class="contact-address-block">
+              <h6>{{ block.settings.title }}</h6>
+              {% if block.settings.url != blank %}
+                <a href="{{ block.settings.url }}">{{ block.settings.subtitle }}</a>
+              {% else %}
+                <p>{{ block.settings.subtitle }}</p>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="contact-map-block">
+        {{ section.settings.map_embed }}
+        {% comment %}<div id="map"></div>{% endcomment %}
+      </div>
+    </div>
+    
+  </div>
+</div>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly" defer></script>
+<script type="text/javascript">
+  function initMap() {
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 4,
+    center: { lat: -33, lng: 151 },
+  });
+  const image =
+    "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+  const beachMarker = new google.maps.Marker({
+    position: { lat: -96.00066022959187, lng: 41.220787010816316 },
+    map,
+    icon: image,
+  });
+}
+
+window.initMap = initMap;
+</script> -->
+{% schema %}
+  {
+    "name": "Contact Address",
+    "settings": [
+      {
+        "type": "color",
+        "id": "bgcolor",
+        "label": "Background Color"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      },
+      {
+        "type": "textarea",
+        "id": "content",
+        "label": "Sub heading"
+      },
+      {
+        "type": "text",
+        "id": "subtitle",
+        "label": "Sub title"
+      },
+      {
+        "type": "html",
+        "id": "map_embed",
+        "label": "map embed"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "address",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "subtitle",
+            "label": "Sub heading"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "Sub url"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
